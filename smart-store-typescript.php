@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name:       Smart Store
+ * Plugin Name:       Smart Store Plugin
  * Plugin URI:        https://smart.com/plugins/smart-store/
  * Description:       A description of the plugin.
  * Version:           1.10.3

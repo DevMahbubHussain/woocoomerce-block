@@ -1,30 +1,17 @@
 {
   "$schema": "https://schemas.wp.org/trunk/block.json",
   "apiVersion": 3,
-  "name": "smart-store/product-grid",
+  "name": "smart-store/product-title",
   "version": "0.1.0",
-  "title": "smart-grid-template",
+  "title": "product title",
   "category": "widgets",
   "icon": "smiley",
-  "description": "WooCommerce Product Grid",
+  "description": "WooCommerce Product Title",
   "example": {},
   "supports": {
     "html": false
   },
-  "attributes": {
-    "perPage": {
-      "type": "number",
-      "default": 6
-    },
-    "category": {
-      "type": "string",
-      "default": ""
-    },
-    "template": {
-      "type": "string",
-      "default": "grid"
-    }
-  },
+ "parent": ["smart-store/product-title"],
   "textdomain": "smart-store",
   "editorScript": "file:./index.js",
   "editorStyle": "file:./index.css",

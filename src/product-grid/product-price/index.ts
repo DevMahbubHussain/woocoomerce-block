@@ -1,8 +1,10 @@
 import { registerBlockType } from '@wordpress/blocks';
-import Edit from "./edit";
+import { ProductPrice } from './edit';
 import metadata from './block.json';
 
 registerBlockType(metadata.name as any, {
- edit: Edit,
+  edit:ProductPrice,
   save: () => null,
 });
+
+export { ProductPrice };

@@ -1,0 +1,15 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "smart-store/product-card",
+  "title": "Product Card",
+  "category": "widgets",
+  "icon": "products",
+  "description": "Displays a single product with title, price, and image.",
+  "supports": {
+    "html": false,
+    "inserter": false
+  },
+  "parent": ["smart-store/product-grid"],
+  "editorScript": "file:./index.js"
+}

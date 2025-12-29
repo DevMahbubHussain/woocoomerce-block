@@ -1,46 +1,38 @@
-import apiFetch from "@wordpress/api-fetch";
-import { useBlockProps } from "@wordpress/block-editor";
-import { useState,useEffect} from "@wordpress/element"
-import { ProductResponseItem } from "src/types/produc-response";
+import { BlockEditProps } from '@wordpress/blocks';
+import { BlockAttributes } from './attributes-types';
+import { useProducts } from './hooks/usePorducts';
+import { useBlockProps } from '@wordpress/block-editor';
+import { ProductProvider } from './context/product-context';
+import ProductCard from './product-card/edit';
 
 
-export default function Edit() {
-    const [products, setProducts] = useState<ProductResponseItem[]>([]);
-    const[loading,setLoading] = useState(false);
+type props = BlockEditProps<BlockAttributes>;
+
+export default function edit({ attributes, setAttributes }: props) {
     const blockProps = useBlockProps();
+    const { perPage = 6, category = '', template = 'grid' } = attributes;
+
+    const { products, loading, error } = useProducts({ perPage, category })
+
+    if (loading) return <p>Loading products…</p>;
+    if (error) return <p>Error loading products: {error.message}</p>;
+    if (!products.length) return <p>No products found.</p>;
 
 
-    // fetch products form store api end point usiing wordpress fetchApi
-    useEffect(() => {
-        setLoading(true);
-        try{
-        apiFetch<ProductResponseItem[]>({
-                    path: '/wc/store/v1/products',
-                }).then((response) => {
-                    setProducts(response);
-                    setLoading(false);
-                });
-        }
-        catch(e){
-            console.log(e);
-            setLoading(false);
-        }
-        
-    },[]);
 
-    return(
-        <div {...blockProps}>
-            <h2>Product Grid</h2>
-            <ul>
-                {products.map((product) => (
-                    <li key={product?.id}>
-                        <h3>{product?.name}</h3>
-                        <p>{product?.description}</p>
-                        <img src={product?.images[0]?.src} alt={product?.name} style={{width:"150px", height:"150px"}} />
-                    </li>
-                ))}
-            </ul>
+    return (
+        <div className={`product-grid product-grid--${template}`}>
+            {
+                products.map((product)=>(
+                    <ProductProvider key={product.id} value={product}>
+                        <ProductCard/>
+                    </ProductProvider>
+                ))
+            }
+
+
+
         </div>
-    );
-
+    )
 }
+
