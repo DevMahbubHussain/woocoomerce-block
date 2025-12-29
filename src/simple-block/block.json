@@ -1,0 +1,36 @@
+{
+    "$schema": "https://schemas.wp.org/trunk/block.json",
+    "apiVersion": 3,
+    "name": "smart-store/simple-block",
+    "version": "0.1.0",
+    "title": "smart",
+    "category": "widgets",
+    "icon": "smiley",
+    "description": "Simple Block with TypeScript.",
+    "example": {},
+    "supports": {
+        "html": false
+    },
+    "attributes": {
+       "message":{
+        "type":"string",
+        "default":"Hello World"
+       },
+       "counter":{
+        "type":"number",
+        "default":0
+       },
+       "imageUrl":{
+        "type":"string"
+       },
+       "imageId":{
+        "type":"number"
+       }
+    },
+    "textdomain": "smart-store",
+    "editorScript": "file:./index.js", 
+    "editorStyle": "file:./index.css",
+    "style": "file:./style-index.css",
+    "render": "file:./render.php",
+    "viewScript": "file:./view.js"
+}

@@ -1,0 +1,26 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "smart-store/product-image",
+	"version": "0.1.0",
+	"title": "Product Image",
+	"category": "widgets",
+	"icon": "smiley",
+	"description": "WooCommerce Product Image.",
+	"example": {},
+	"supports": {
+		"html": false
+	},
+	"attributes": {
+		"showImage": {
+			"type": "boolean",
+			"default": true
+		}
+	},
+	"textdomain": "woo-builder",
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
+	"style": "file:./style-index.css",
+	"render": "file:./render.php",
+	"viewScript": "file:./view.js"
+}

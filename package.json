@@ -1,0 +1,30 @@
+{
+  "name": "smart-store-typescript",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "wp-scripts start",
+    "build": "wp-scripts build",
+    "lint:js": "wp-scripts lint-js",
+    "format": "wp-scripts format"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "@types/react": "^19.2.7",
+    "@types/react-dom": "^19.2.3",
+    "@types/wordpress__api-fetch": "^3.2.4",
+    "@types/wordpress__block-editor": "^14.21.7",
+    "@types/wordpress__blocks": "^12.5.18",
+    "@types/wordpress__components": "^23.0.12",
+    "@types/wordpress__data": "^6.0.2",
+    "@types/wordpress__element": "^2.4.1",
+    "@types/wordpress__i18n": "^3.4.0",
+    "@wordpress/scripts": "^31.2.0",
+    "typescript": "^5.9.3"
+  }
+}
