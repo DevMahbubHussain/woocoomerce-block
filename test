@@ -1,0 +1,159 @@
+import { useBlockProps, InspectorControls, InnerBlocks } from '@wordpress/block-editor';
+import { PanelBody, RangeControl, SelectControl, ToggleControl, __experimentalNumberControl as NumberControl } from '@wordpress/components';
+import { __ } from '@wordpress/i18n';
+import { useSelect } from '@wordpress/data';
+import { store as coreStore } from '@wordpress/core-data';
+
+// Architecture Imports
+import { ProductDataContextProvider } from '../../shared/product-context';
+
+// interface EditProps {
+//     attributes: {
+//         columns?: number;
+//         rows?: number;
+//         limit?: number;
+//         orderby?: string;
+//         order?: string;
+//         categories?: number[];
+//         catOperator?: string;
+//         contentVisibility?: {
+//             image?: boolean;
+//             title?: boolean;
+//             price?: boolean;
+//             rating?: boolean;
+//             button?: boolean;
+//         };
+//         alignButtons?: boolean;
+//         [key: string]: any;
+//     };
+//     setAttributes: (attributes: any) => void;
+// }
+
+
+export default function Edit({ attributes, setAttributes }) {
+    const {
+        query = { perPage: 9, orderBy: 'date', order: 'desc' },
+        displayLayout = { columns: 3 },
+        paginate = false,
+        alignButtons = false,
+        contentVisibility = {
+            image: true,
+            title: true,
+            price: true,
+            rating: true,
+            button: true,
+        },
+    } = attributes;
+
+    const blockProps = useBlockProps({
+        className: `wpsp-product-grid columns-${displayLayout.columns}`
+    });
+
+    const { products, isResolving } = useSelect((select) => {
+        const apiQuery = {
+            post_type: 'product',
+            per_page: query.perPage || 9,
+            orderby: query.orderBy || 'date',
+            order: query.order || 'desc',
+            status: 'publish',
+        };
+        return {
+            products: select(coreStore).getEntityRecords('postType', 'product', apiQuery),
+            isResolving: select(coreStore).isResolving('getEntityRecords', ['postType', 'product', apiQuery]),
+        };
+    }, [query.perPage, query.orderBy, query.order]);
+
+    const previewProduct = products?.[0] || null;
+
+    return (
+        <>
+            <InspectorControls>
+                <PanelBody title={__('Product Settings', 'woo-product-slider-pro')} initialOpen={true}>
+                    <RangeControl
+                        label={__('Columns', 'woo-product-slider-pro')}
+                        value={displayLayout.columns}
+                        onChange={(val) => setAttributes({
+                            displayLayout: { ...displayLayout, columns: val }
+                        })}
+                        min={1}
+                        max={6}
+                    />
+                    <NumberControl
+                        label={__('Limit', 'woo-product-slider-pro')}
+                        value={query.perPage}
+                        onChange={(val) => setAttributes({
+                            query: { ...query, perPage: parseInt(val) || 9 }
+                        })}
+                    />
+
+                    <SelectControl
+                        label={__('Order By', 'woo-product-slider-pro')}
+                        value={query.orderBy}
+                        options={[
+                            { label: __('Date', 'woo-product-slider-pro'), value: 'date' },
+                            { label: __('Menu Order', 'woo-product-slider-pro'), value: 'menu_order' },
+                            { label: __('Popularity', 'woo-product-slider-pro'), value: 'popularity' },
+                            { label: __('Rating', 'woo-product-slider-pro'), value: 'rating' },
+                            { label: __('Title', 'woo-product-slider-pro'), value: 'title' },
+                        ]}
+                        onChange={(val) => setAttributes({
+                            query: { ...query, orderBy: val }
+                        })}
+                    />
+
+
+                    <ToggleControl
+                        label={__('Paginate', 'woo-product-slider-pro')}
+                        checked={paginate}
+                        onChange={(val) => setAttributes({ paginate: val })}
+                    />
+                    <ToggleControl
+                        label={__('Align Buttons', 'woo-product-slider-pro')}
+                        checked={alignButtons}
+                        onChange={(value) => setAttributes({ alignButtons: value })}
+                    />
+                    
+                     <ToggleControl
+                        label={__('Show Image', 'woo-product-slider-pro')}
+                        checked={contentVisibility.image !== false}
+                        onChange={(value) => setAttributes({ 
+                            contentVisibility: { ...contentVisibility, image: value } 
+                        })}
+                    />
+                </PanelBody>
+
+                
+            </InspectorControls>
+
+
+
+            <div {...blockProps}>
+                {isResolving && (
+                    <div className="wpsp-updating-indicator" style={{ textAlign: 'center', padding: '10px' }}>
+                        {__('Loading preview...', 'woo-product-slider-pro')}
+                    </div>
+                )}
+
+                <ProductDataContextProvider product={previewProduct} isLoading={isResolving}>
+                    <InnerBlocks
+                        allowedBlocks={['wpsp/product-template']}
+                        template={[
+                            [
+                                'wpsp/product-template',
+                                {},
+                                [
+                                    ['wpsp/product-image', {}],
+                                    ['wpsp/product-title', {}],
+                                    ['wpsp/product-price', {}],
+                                    ['wpsp/product-rating', {}],
+                                    ['wpsp/add-to-cart', {}],
+                                ],
+                            ],
+                        ]}
+                        templateLock={false}
+                    />
+                </ProductDataContextProvider>
+            </div>
+        </>
+    );
+}
